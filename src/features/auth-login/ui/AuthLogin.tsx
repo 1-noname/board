@@ -8,18 +8,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import {
-  Alert,
-  Box,
   Button,
   IconButton,
   InputAdornment,
+  Stack,
   TextField,
 } from "@mui/material";
-import { getApiErrorMessage } from "@shared/index";
 
 export const LoginForm = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const { mutate, isPending, error } = useLoginMutation();
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const { mutate, isPending } = useLoginMutation();
 
   const {
     register,
@@ -31,18 +29,12 @@ export const LoginForm = () => {
   });
 
   return (
-    <Box
+    <Stack
       component="form"
       onSubmit={handleSubmit((data) => mutate(data))}
       noValidate
-      sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+      spacing={2}
     >
-      {error && (
-        <Alert severity="error">
-          {getApiErrorMessage(error, "Invalid email or password")}
-        </Alert>
-      )}
-
       <TextField
         {...register("email")}
         label="Email"
@@ -91,6 +83,6 @@ export const LoginForm = () => {
       >
         {isPending ? "Signing in..." : "Sign In"}
       </Button>
-    </Box>
+    </Stack>
   );
 };

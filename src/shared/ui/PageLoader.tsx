@@ -4,7 +4,7 @@ export const PageLoader = () => {
   return (
     <Box
       sx={{
-        display: "table",
+        display: "flex",
         justifyContent: "center",
         alignItems: "center",
         minHeight: "100vh",

@@ -1,10 +1,12 @@
 import { LoginForm } from "@features/auth-login";
-import { Box } from "@mui/material";
-import { AuthCard } from "@widgets/auth-card";
+import { Container } from "@mui/material";
+import { AuthCard } from "@shared/ui";
 
 export const LoginPage = () => {
   return (
-    <Box
+    <Container
+      component="main"
+      maxWidth={false}
       sx={{
         minHeight: "100vh",
         display: "flex",
@@ -23,6 +25,6 @@ export const LoginPage = () => {
       >
         <LoginForm />
       </AuthCard>
-    </Box>
+    </Container>
   );
 };

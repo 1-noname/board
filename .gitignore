@@ -25,7 +25,7 @@ dist-ssr
 .vitest/
 .github/
 .cta.json
-
+.env
 # Playwright
 /test-results/
 /playwright-report/
