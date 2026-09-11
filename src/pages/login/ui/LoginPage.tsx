@@ -1,6 +1,6 @@
-import { LoginForm } from "@features/auth-login";
+import { LoginForm } from "@features/auth";
 import { Container } from "@mui/material";
-import { AuthCard } from "@shared/ui";
+import { AuthCard } from "@shared/ui/auth";
 
 export const LoginPage = () => {
   return (
