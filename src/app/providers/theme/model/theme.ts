@@ -17,7 +17,7 @@ const baseThemeOptions: ThemeOptions = {
       sm: 600,
       md: 900,
       lg: 1200,
-      xl: 1440,
+      xl: 1920,
     },
   },
   shape: {
@@ -60,6 +60,12 @@ const baseThemeOptions: ThemeOptions = {
       fontWeight: 600,
       lineHeight: 1.45,
     },
+    h6: {
+      fontFamily: defaultFontFamily,
+      fontSize: "0.875rem",
+      fontWeight: 600,
+      lineHeight: 1.5,
+    },
     body1: {
       fontFamily: defaultFontFamily,
       fontSize: "1rem",
@@ -75,6 +81,12 @@ const baseThemeOptions: ThemeOptions = {
     subtitle1: {
       fontFamily: defaultFontFamily,
       fontSize: "0.875rem",
+      fontWeight: 600,
+      lineHeight: 1.4,
+    },
+    subtitle2: {
+      fontFamily: defaultFontFamily,
+      fontSize: "0.75rem",
       fontWeight: 600,
       lineHeight: 1.4,
     },
