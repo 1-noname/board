@@ -1,4 +1,4 @@
-import type { LoginFormData } from "../model/schemes";
+import type { LoginFormData } from "../model/schema";
 import type { AuthResponse } from "../model/types";
 
 import { api } from "@shared/api/base";

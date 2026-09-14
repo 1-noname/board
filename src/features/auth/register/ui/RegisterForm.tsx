@@ -2,10 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { useRegisterMutation } from "../api/useRegisterMutation";
-import {
-  type RegisterFormData,
-  registerSchema,
-} from "../model/register.schema";
+import { type RegisterFormData, registerSchema } from "../model/schema";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Visibility from "@mui/icons-material/Visibility";

@@ -1,4 +1,4 @@
-import type { RegisterFormData } from "../model/register.schema";
+import type { RegisterFormData } from "../model/schema";
 
 import { api } from "@shared/api/base";
 import { getApiErrorMessage } from "@shared/lib/getApiErrorMessage";

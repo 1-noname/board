@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { useLoginMutation } from "../api/useLoginMutation";
-import { type LoginFormData, loginSchema } from "../model/schemes";
+import { type LoginFormData, loginSchema } from "../model/schema";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Visibility from "@mui/icons-material/Visibility";
