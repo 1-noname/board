@@ -32,7 +32,7 @@ export const useLoginMutation = () => {
       navigate({ to: "/boards" });
     },
     onError: (error) => {
-      showError(getApiErrorMessage(error, "Invalid email or password"));
+      showError(getApiErrorMessage(error));
     },
   });
 };
