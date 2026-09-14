@@ -1,4 +1,4 @@
-import type { User } from "@entities/user/model/types";
+import type { User } from "@entities/user/model/schema";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 

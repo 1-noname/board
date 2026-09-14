@@ -1,4 +1,4 @@
-import type { LoginFormData } from "../model/schemes";
+import type { LoginFormData } from "../model/schema";
 import type { AuthResponse } from "../model/types";
 
 import { api } from "@shared/api/base";
@@ -32,7 +32,7 @@ export const useLoginMutation = () => {
       navigate({ to: "/boards" });
     },
     onError: (error) => {
-      showError(getApiErrorMessage(error, "Invalid email or password"));
+      showError(getApiErrorMessage(error));
     },
   });
 };
