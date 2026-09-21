@@ -1,5 +1,6 @@
 import { rootRoute } from "./root";
 import { authRoute } from "./routes/auth.route";
+import { boardDetailRoute } from "./routes/board.route";
 import { boardsRoute } from "./routes/boards.route";
 import { indexRoute } from "./routes/index.route";
 import { registerRoute } from "./routes/register.route";
@@ -11,6 +12,7 @@ const routeTree = rootRoute.addChildren([
   boardsRoute,
   authRoute,
   registerRoute,
+  boardDetailRoute,
 ]);
 
 export const router = createRouter({
