@@ -1,6 +1,6 @@
 import type { EditBoardFormData } from "../model/schema";
 
-import { boardSchema } from "@entities/board/model/schema";
+import { boardSchema } from "@entities/board";
 import { api } from "@shared/api/base";
 import { getApiErrorMessage } from "@shared/lib/getApiErrorMessage";
 import { useToastStore } from "@shared/store/useToastStore";
@@ -11,7 +11,7 @@ interface EdtoBoardParams {
   dto: EditBoardFormData;
 }
 
-export const editBoardRequest = async ({ id, dto }: EdtoBoardParams) => {
+const editBoardRequest = async ({ id, dto }: EdtoBoardParams) => {
   const { data } = await api.patch(`/boards/${id}`, dto);
 
   return boardSchema.parse(data);
