@@ -1,40 +1,53 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
-import { useLoginMutation } from "../api/useLoginMutation";
-import { type LoginFormData, loginSchema } from "../model/schema";
+import { useRegisterMutation } from "../api/useRegisterMutation";
+import { type RegisterFormData, registerSchema } from "../model/schema";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import {
+  Box,
   Button,
   IconButton,
   InputAdornment,
-  Stack,
   TextField,
 } from "@mui/material";
 
-export const LoginForm = () => {
+export const RegisterForm = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const { mutate, isPending } = useLoginMutation();
+  const { mutate, isPending } = useRegisterMutation();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
-    defaultValues: { email: "", password: "" },
+  } = useForm<RegisterFormData>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      passwordRepeat: "",
+    },
   });
 
   return (
-    <Stack
+    <Box
       component="form"
       onSubmit={handleSubmit((data) => mutate(data))}
       noValidate
-      spacing={2}
+      sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 2 }}
     >
+      <TextField
+        {...register("name")}
+        label="Name"
+        fullWidth
+        error={!!errors.name}
+        helperText={errors.name?.message}
+      />
+
       <TextField
         {...register("email")}
         label="Email"
@@ -42,8 +55,6 @@ export const LoginForm = () => {
         fullWidth
         error={!!errors.email}
         helperText={errors.email?.message}
-        disabled={isPending}
-        autoComplete="email"
       />
 
       <TextField
@@ -51,10 +62,9 @@ export const LoginForm = () => {
         label="Password"
         type={showPassword ? "text" : "password"}
         fullWidth
+        autoComplete="new-password"
         error={!!errors.password}
         helperText={errors.password?.message}
-        disabled={isPending}
-        autoComplete="current-password"
         slotProps={{
           input: {
             endAdornment: (
@@ -73,16 +83,26 @@ export const LoginForm = () => {
         }}
       />
 
+      <TextField
+        {...register("passwordRepeat")}
+        label="Confirm Password"
+        type={showPassword ? "text" : "password"}
+        fullWidth
+        autoComplete="new-password"
+        error={!!errors.passwordRepeat}
+        helperText={errors.passwordRepeat?.message}
+      />
+
       <Button
         type="submit"
         variant="contained"
-        size="large"
         fullWidth
+        size="large"
         disabled={isPending}
         sx={{ mt: 1 }}
       >
-        {isPending ? "Signing in..." : "Sign In"}
+        Register
       </Button>
-    </Stack>
+    </Box>
   );
 };
