@@ -1,14 +1,11 @@
+import { NotFound } from "./ui/NotFound";
+import { RootLayout } from "./ui/RootLayout";
+
 import { PageLoader } from "@shared/ui/page-loader";
-import { ToastContainer } from "@shared/ui/toast";
-import { createRootRoute, Outlet } from "@tanstack/react-router";
+import { createRootRoute } from "@tanstack/react-router";
 
 export const rootRoute = createRootRoute({
-  component: () => (
-    <>
-      <Outlet />
-      <ToastContainer />
-    </>
-  ),
+  component: RootLayout,
   pendingComponent: PageLoader,
-  notFoundComponent: () => <div>Not found page</div>,
+  notFoundComponent: NotFound,
 });
