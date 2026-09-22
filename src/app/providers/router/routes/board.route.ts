@@ -1,18 +1,11 @@
-import { rootRoute } from "../root";
+import { requireAuth } from "../helper/guards";
+import { mainRoute } from "./main.route";
 
-import { BoardPage } from "@pages/board";
-import { useAuthStore } from "@shared/store/authStore";
-import { createRoute, redirect } from "@tanstack/react-router";
+import { createRoute, lazyRouteComponent } from "@tanstack/react-router";
 
 export const boardDetailRoute = createRoute({
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => mainRoute,
   path: "/boards/$boardId",
-  beforeLoad: () => {
-    const isAuthenticated = !!useAuthStore.getState().accessToken;
-
-    if (!isAuthenticated) {
-      throw redirect({ to: "/login" });
-    }
-  },
-  component: BoardPage,
+  beforeLoad: requireAuth,
+  component: lazyRouteComponent(() => import("@pages/board"), "BoardPage"),
 });

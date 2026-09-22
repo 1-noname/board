@@ -1,10 +1,10 @@
-import { redirectRoot } from "../helper/guards";
 import { rootRoute } from "../root";
+import { AppLayout } from "../ui/AppLayout";
 
 import { createRoute } from "@tanstack/react-router";
 
-export const indexRoute = createRoute({
+export const mainRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: "/",
-  beforeLoad: redirectRoot,
+  id: "main-route",
+  component: AppLayout,
 });

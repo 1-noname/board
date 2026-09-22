@@ -3,9 +3,9 @@ import { mainRoute } from "./main.route";
 
 import { createRoute, lazyRouteComponent } from "@tanstack/react-router";
 
-export const boardsRoute = createRoute({
+export const profileRoute = createRoute({
   getParentRoute: () => mainRoute,
-  path: "/boards",
+  path: "/profile",
   beforeLoad: requireAuth,
-  component: lazyRouteComponent(() => import("@pages/boards"), "BoardsPage"),
+  component: lazyRouteComponent(() => import("@pages/profile"), "ProfilePage"),
 });
