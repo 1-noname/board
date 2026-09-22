@@ -12,6 +12,7 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material";
+import { useId } from "react";
 
 interface CreateBoardDialogProps {
   open: boolean;
@@ -23,6 +24,7 @@ export const CreateBoardDialog = ({
   onClose,
 }: CreateBoardDialogProps) => {
   const { mutate, isPending } = useCreateBoardMutation();
+  const formId = useId();
 
   const {
     register,
@@ -54,8 +56,8 @@ export const CreateBoardDialog = ({
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="xs" fullWidth>
       <DialogTitle>Create board</DialogTitle>
-      <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        <DialogContent dividers>
+      <DialogContent dividers>
+        <form id={formId} onSubmit={handleSubmit(onSubmit)} noValidate>
           <TextField
             {...register("title")}
             label="Title"
@@ -78,16 +80,21 @@ export const CreateBoardDialog = ({
             helperText={errors.description?.message}
             slotProps={{ htmlInput: { maxLength: 300 } }}
           />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} disabled={isPending} color="inherit">
-            Cancel
-          </Button>
-          <Button type="submit" variant="contained" loading={isPending}>
-            Create board
-          </Button>
-        </DialogActions>
-      </form>
+        </form>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose} disabled={isPending} color="inherit">
+          Cancel
+        </Button>
+        <Button
+          type="submit"
+          form={formId}
+          variant="contained"
+          loading={isPending}
+        >
+          Create board
+        </Button>
+      </DialogActions>
     </Dialog>
   );
 };
