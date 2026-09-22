@@ -1,3 +1,4 @@
+import { useId } from "react";
 import { useForm } from "react-hook-form";
 
 import { useCreateBoardMutation } from "../api/useCreateBoardMutation";
@@ -12,7 +13,6 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material";
-import { useId } from "react";
 
 interface CreateBoardDialogProps {
   open: boolean;
