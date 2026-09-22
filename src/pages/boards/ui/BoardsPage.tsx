@@ -112,7 +112,11 @@ export const BoardsPage = () => {
           <DashboardOutlinedIcon
             sx={{ fontSize: 64, color: "text.secondary", mb: 2 }}
           />
-          <Typography variant="h6" sx={{ fontWeight: "bold" }} gutterBottom>
+          <Typography
+            variant="h6"
+            sx={(theme) => ({ fontWeight: theme.typography.fontWeightBold })}
+            gutterBottom
+          >
             No boards yet
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
