@@ -1,11 +1,8 @@
 import { useForm } from "react-hook-form";
 
 import { useCreateColumnMutation } from "../api/useCreateColumnMutation";
-import {
-  type CreateColumnFormValues,
-  createColumnSchema,
-} from "../model/schema";
 
+import { columnFormSchema,type ColumnFormValues } from "@entities/column";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Button,
@@ -34,8 +31,8 @@ export const CreateColumnDialog = ({
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<CreateColumnFormValues>({
-    resolver: zodResolver(createColumnSchema),
+  } = useForm<ColumnFormValues>({
+    resolver: zodResolver(columnFormSchema),
     defaultValues: {
       title: "",
     },
@@ -46,7 +43,7 @@ export const CreateColumnDialog = ({
     onClose();
   };
 
-  const onSubmit = (data: CreateColumnFormValues) => {
+  const onSubmit = (data: ColumnFormValues) => {
     createColumn(data.title, {
       onSuccess: () => {
         handleClose();
