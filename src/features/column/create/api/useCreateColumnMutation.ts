@@ -1,5 +1,4 @@
-import { createColumnSchema } from "../model/schema";
-
+import { columnFormSchema } from "@entities/column";
 import { api } from "@shared/api/base";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
@@ -14,7 +13,7 @@ const createColumnRequest = async ({
 }: createColumnRequestProps) => {
   const { data } = await api.post(`/boards/${boardId}/columns`, { title });
 
-  return createColumnSchema.parse(data);
+  return columnFormSchema.parse(data);
 };
 
 export const useCreateColumnMutation = (boardId: string) => {
