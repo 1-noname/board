@@ -1,12 +1,18 @@
 import type { Column } from "../model/schema";
 
-import { Box, Paper, Typography } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import { Box, IconButton, Paper, Typography } from "@mui/material";
 
 interface ColumnCardProps {
   column: Column;
+  onEdit: (column: Column) => void;
 }
 
-export const ColumnCard = ({ column }: ColumnCardProps) => {
+export const ColumnCard = ({ column, onEdit }: ColumnCardProps) => {
+  const handleEditClick = () => {
+    onEdit(column);
+  };
+
   return (
     <Paper
       elevation={1}
@@ -37,6 +43,14 @@ export const ColumnCard = ({ column }: ColumnCardProps) => {
         >
           {column.title}
         </Typography>
+
+        <IconButton
+          size="small"
+          onClick={handleEditClick}
+          aria-label="edit column"
+        >
+          <EditIcon fontSize="small" />
+        </IconButton>
       </Box>
 
       <Box sx={{ flexGrow: 1, minHeight: 100 }}>
