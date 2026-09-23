@@ -10,12 +10,10 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { useAuthStore } from "@shared/store/authStore";
 import { Link, useNavigate } from "@tanstack/react-router";
 
 export const Header = () => {
   const navigate = useNavigate();
-  const isAuthenticated = useAuthStore((state) => Boolean(state.accessToken));
   const { mutate: logout, isPending: isLoggingOut } = useLogoutMutation();
 
   const handleProfileClick = () => {
@@ -44,40 +42,22 @@ export const Header = () => {
           </Typography>
 
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            {isAuthenticated ? (
-              <>
-                <IconButton
-                  color="inherit"
-                  aria-label="account profile"
-                  onClick={handleProfileClick}
-                >
-                  <AccountCircleIcon />
-                </IconButton>
+            <IconButton
+              color="inherit"
+              aria-label="account profile"
+              onClick={handleProfileClick}
+            >
+              <AccountCircleIcon />
+            </IconButton>
 
-                <Button
-                  color="inherit"
-                  startIcon={<LogoutIcon />}
-                  onClick={handleLogoutClick}
-                  disabled={isLoggingOut}
-                >
-                  Logout
-                </Button>
-              </>
-            ) : (
-              <>
-                <Button color="inherit" component={Link} to="/login">
-                  Login
-                </Button>
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  component={Link}
-                  to="/register"
-                >
-                  Register
-                </Button>
-              </>
-            )}
+            <Button
+              color="inherit"
+              startIcon={<LogoutIcon />}
+              onClick={handleLogoutClick}
+              disabled={isLoggingOut}
+            >
+              Logout
+            </Button>
           </Box>
         </Toolbar>
       </Container>
