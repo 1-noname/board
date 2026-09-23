@@ -1,8 +1,9 @@
 import { useState } from "react";
 
 import { boardDetailRoute } from "@app/providers/router/routes/board.route";
-import { ColumnCard, useColumnsQuery } from "@entities/column";
+import { type Column,ColumnCard, useColumnsQuery } from "@entities/column";
 import { CreateColumnDialog } from "@features/column/create/ui/CreateColumnDialog";
+import { EditColumnDialog } from "@features/column/edit";
 import AddIcon from "@mui/icons-material/Add";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Box, Button, Container, Typography } from "@mui/material";
@@ -15,6 +16,7 @@ export const BoardPage = () => {
 
   const { data: columns, isLoading, isError } = useColumnsQuery(boardId);
   const [isCreateColumnOpen, setIsCreateColumnOpen] = useState<boolean>(false);
+  const [editColumn, setEditColumn] = useState<Column | null>(null);
 
   const handleBackToBoards = () => {
     navigate({ to: "/boards" });
@@ -26,6 +28,14 @@ export const BoardPage = () => {
 
   const handleCloseCreateColumn = () => {
     setIsCreateColumnOpen(false);
+  };
+
+  const handleOpenEdit = (column: Column) => {
+    setEditColumn(column);
+  };
+
+  const handleCloseEdit = () => {
+    setEditColumn(null);
   };
 
   if (isLoading) {
@@ -105,7 +115,11 @@ export const BoardPage = () => {
           }}
         >
           {columns.map((column) => (
-            <ColumnCard key={column.id} column={column} />
+            <ColumnCard
+              key={column.id}
+              column={column}
+              onEdit={handleOpenEdit}
+            />
           ))}
         </Box>
       )}
@@ -114,6 +128,13 @@ export const BoardPage = () => {
         boardId={boardId}
         open={isCreateColumnOpen}
         onClose={handleCloseCreateColumn}
+      />
+
+      <EditColumnDialog
+        boardId={boardId}
+        column={editColumn}
+        open={!!editColumn}
+        onClose={handleCloseEdit}
       />
     </Container>
   );
