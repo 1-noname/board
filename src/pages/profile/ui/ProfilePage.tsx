@@ -9,22 +9,22 @@ import {
   Avatar,
   Box,
   Button,
-  CircularProgress,
   Container,
   Divider,
   Paper,
   Typography,
 } from "@mui/material";
+import { PageLoader } from "@shared/ui/page-loader";
 import { useNavigate } from "@tanstack/react-router";
 
 export const ProfilePage = () => {
   const navigate = useNavigate();
-  const { data: user, isLoading } = useProfileQuery();
+  const { data: user, isLoading, isError } = useProfileQuery();
 
   const [isEditOpen, setIsEditOpen] = useState<boolean>(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
 
-  const handleBack = () => {
+  const handleBackToBoards = () => {
     navigate({ to: "/boards" });
   };
 
@@ -44,11 +44,17 @@ export const ProfilePage = () => {
     setIsDeleteOpen(false);
   };
 
-  if (isLoading && !user) {
+  if (isLoading) {
+    return <PageLoader />;
+  }
+
+  if (isError || !user) {
     return (
-      <Box sx={{ display: "flex", justifyContent: "center", py: 8 }}>
-        <CircularProgress size={48} />
-      </Box>
+      <Container maxWidth="md" sx={{ py: 4 }}>
+        <Typography color="error">
+          Failed to load profile information.
+        </Typography>
+      </Container>
     );
   }
 
@@ -56,7 +62,7 @@ export const ProfilePage = () => {
     <Container maxWidth="md" sx={{ py: 4 }}>
       <Button
         startIcon={<ArrowBackIcon />}
-        onClick={handleBack}
+        onClick={handleBackToBoards}
         sx={{ mb: 3 }}
         color="inherit"
       >
@@ -74,7 +80,7 @@ export const ProfilePage = () => {
         >
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
             <Avatar sx={{ width: 64, height: 64, fontSize: "1.75rem" }}>
-              {user?.name?.[0]?.toUpperCase() ?? "U"}
+              {user.name[0]?.toUpperCase() ?? "U"}
             </Avatar>
             <Box>
               <Typography
@@ -83,7 +89,7 @@ export const ProfilePage = () => {
                   fontWeight: theme.typography.fontWeightBold,
                 })}
               >
-                {user?.name}
+                {user.name}
               </Typography>
               <Typography variant="body2" color="text.secondary">
                 Personal Account
@@ -111,13 +117,12 @@ export const ProfilePage = () => {
             Email address
           </Typography>
           <Typography variant="body1" sx={{ mt: 0.5 }}>
-            {user?.email}
+            {user.email}
           </Typography>
         </Box>
 
         <Divider sx={{ my: 3 }} />
 
-        {/* Danger Zone */}
         <Box>
           <Typography
             variant="h6"
@@ -140,7 +145,7 @@ export const ProfilePage = () => {
       </Paper>
 
       <EditProfileDialog
-        user={user ?? null}
+        user={user}
         open={isEditOpen}
         onClose={handleCloseEdit}
       />
