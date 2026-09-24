@@ -1,8 +1,9 @@
 import { useState } from "react";
 
 import { boardDetailRoute } from "@app/providers/router/routes/board.route";
-import { type Column,ColumnCard, useColumnsQuery } from "@entities/column";
+import { type Column, ColumnCard, useColumnsQuery } from "@entities/column";
 import { CreateColumnDialog } from "@features/column/create/ui/CreateColumnDialog";
+import { DeleteColumnDialog } from "@features/column/delete";
 import { EditColumnDialog } from "@features/column/edit";
 import AddIcon from "@mui/icons-material/Add";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -17,6 +18,7 @@ export const BoardPage = () => {
   const { data: columns, isLoading, isError } = useColumnsQuery(boardId);
   const [isCreateColumnOpen, setIsCreateColumnOpen] = useState<boolean>(false);
   const [editColumn, setEditColumn] = useState<Column | null>(null);
+  const [deleteColumn, setDeleteColumn] = useState<Column | null>(null);
 
   const handleBackToBoards = () => {
     navigate({ to: "/boards" });
@@ -36,6 +38,14 @@ export const BoardPage = () => {
 
   const handleCloseEdit = () => {
     setEditColumn(null);
+  };
+
+  const handleOpenDelete = (column: Column) => {
+    setDeleteColumn(column);
+  };
+
+  const handleCloseDelete = () => {
+    setDeleteColumn(null);
   };
 
   if (isLoading) {
@@ -119,6 +129,7 @@ export const BoardPage = () => {
               key={column.id}
               column={column}
               onEdit={handleOpenEdit}
+              onDelete={handleOpenDelete}
             />
           ))}
         </Box>
@@ -135,6 +146,13 @@ export const BoardPage = () => {
         column={editColumn}
         open={!!editColumn}
         onClose={handleCloseEdit}
+      />
+
+      <DeleteColumnDialog
+        boardId={boardId}
+        column={deleteColumn}
+        open={!!deleteColumn}
+        onClose={handleCloseDelete}
       />
     </Container>
   );
