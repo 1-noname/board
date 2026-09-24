@@ -1,9 +1,11 @@
 import type { Column } from "../model/schema";
 
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import DeleteIcon from "@mui/icons-material/Delete";
+import DragHandleIcon from "@mui/icons-material/DragHandle";
 import EditIcon from "@mui/icons-material/Edit";
 import { Box, IconButton, Paper, Typography } from "@mui/material";
-
 interface ColumnCardProps {
   column: Column;
   onEdit: (column: Column) => void;
@@ -11,6 +13,21 @@ interface ColumnCardProps {
 }
 
 export const ColumnCard = ({ column, onEdit, onDelete }: ColumnCardProps) => {
+  const {
+    setNodeRef,
+    attributes,
+    listeners,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: column.id });
+
+  const style = {
+    transform: CSS.Translate.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
   const handleEditClick = () => {
     onEdit(column);
   };
@@ -21,6 +38,8 @@ export const ColumnCard = ({ column, onEdit, onDelete }: ColumnCardProps) => {
 
   return (
     <Paper
+      ref={setNodeRef}
+      style={style}
       elevation={1}
       sx={{
         width: 300,
@@ -41,6 +60,15 @@ export const ColumnCard = ({ column, onEdit, onDelete }: ColumnCardProps) => {
           mb: 2,
         }}
       >
+        <IconButton
+          size="small"
+          {...attributes}
+          {...listeners}
+          sx={{ cursor: isDragging ? "grabbing" : "grab" }}
+          aria-label="drag column"
+        >
+          <DragHandleIcon />
+        </IconButton>
         <Typography
           variant="subtitle1"
           sx={(theme) => ({
