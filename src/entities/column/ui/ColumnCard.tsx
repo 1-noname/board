@@ -1,3 +1,5 @@
+import { type ReactNode } from "react";
+
 import type { Column } from "../model/schema";
 
 import { useSortable } from "@dnd-kit/sortable";
@@ -5,14 +7,23 @@ import { CSS } from "@dnd-kit/utilities";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import EditIcon from "@mui/icons-material/Edit";
-import { Box, IconButton, Paper, Typography } from "@mui/material";
+import { Box, Button, IconButton, Paper, Typography } from "@mui/material";
+
 interface ColumnCardProps {
   column: Column;
   onEdit: (column: Column) => void;
   onDelete: (column: Column) => void;
+  onAddTask?: (columnId: string) => void;
+  children?: ReactNode;
 }
 
-export const ColumnCard = ({ column, onEdit, onDelete }: ColumnCardProps) => {
+export const ColumnCard = ({
+  column,
+  onEdit,
+  onDelete,
+  onAddTask,
+  children,
+}: ColumnCardProps) => {
   const {
     setNodeRef,
     attributes,
@@ -98,11 +109,19 @@ export const ColumnCard = ({ column, onEdit, onDelete }: ColumnCardProps) => {
         </Box>
       </Box>
 
-      <Box sx={{ flexGrow: 1, minHeight: 100 }}>
-        <Typography variant="body2" color="text.secondary">
-          No tasks yet
-        </Typography>
+      <Box sx={{ flexGrow: 1, overflowY: "auto", minHeight: 100, mb: 1 }}>
+        {children}
       </Box>
+
+      {onAddTask && (
+        <Button
+          size="small"
+          onClick={() => onAddTask(column.id)}
+          sx={{ justifyContent: "flex-start", mt: "auto" }}
+        >
+          Add task
+        </Button>
+      )}
     </Paper>
   );
 };
