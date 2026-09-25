@@ -27,7 +27,7 @@ export const useReorderColumnMutation = (boardId: string) => {
     },
 
     onMutate: async ({ columnId, newOrder }) => {
-      queryClient.cancelQueries({ queryKey: ["columns", boardId] });
+      await queryClient.cancelQueries({ queryKey: ["columns", boardId] });
 
       const prevColumns = queryClient.getQueryData<Column[]>([
         "columns",

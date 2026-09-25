@@ -1,6 +1,7 @@
-import { type ReactNode, useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 
 import {
+  closestCenter,
   DndContext,
   type DragEndEvent,
   DragOverlay,
@@ -9,8 +10,11 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
+  defaultDropAnimationSideEffects,
+  type DropAnimation,
 } from "@dnd-kit/core";
 import {
+  arrayMove,
   horizontalListSortingStrategy,
   SortableContext,
   sortableKeyboardCoordinates,
@@ -32,6 +36,12 @@ export const ColumnList = ({
   columns,
   renderTasks,
 }: ColumnListProps) => {
+  const [localColumns, setLocalColumns] = useState<Column[]>(columns);
+
+  useEffect(() => {
+    setLocalColumns(columns);
+  }, [columns]);
+
   const [activeColumn, setActiveColumn] = useState<Column | null>(null);
   const { mutate: reorderColumn } = useReorderColumnMutation(boardId);
 
@@ -46,7 +56,7 @@ export const ColumnList = ({
   );
 
   const handleDragStart = (event: DragStartEvent) => {
-    const col = columns?.find((c) => c.id === event.active.id);
+    const col = localColumns.find((c) => c.id === event.active.id);
     if (col) {
       setActiveColumn(col);
     }
@@ -57,11 +67,14 @@ export const ColumnList = ({
 
     setActiveColumn(null);
 
-    if (!over || active.id === over.id || !columns) return;
+    if (!over || active.id === over.id) return;
 
-    const newIndex = columns.findIndex((col) => col.id === over.id);
+    const oldIndex = localColumns.findIndex((col) => col.id === active.id);
+    const newIndex = localColumns.findIndex((col) => col.id === over.id);
 
-    if (newIndex !== -1) {
+    if (oldIndex !== -1 && newIndex !== -1) {
+      setLocalColumns((items) => arrayMove(items, oldIndex, newIndex));
+
       reorderColumn({
         columnId: String(active.id),
         newOrder: newIndex,
@@ -69,19 +82,32 @@ export const ColumnList = ({
     }
   };
 
+  const dropAnimationConfig: DropAnimation = {
+    sideEffects: defaultDropAnimationSideEffects({
+      styles: {
+        active: {
+          opacity: "0.4",
+        },
+      },
+    }),
+    duration: 250,
+    easing: "ease-out",
+  };
+
   return (
     <>
       <DndContext
         sensors={sensors}
+        collisionDetection={closestCenter}
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
       >
         <SortableContext
-          items={columns.map((c) => c.id)}
+          items={localColumns.map((c) => c.id)}
           strategy={horizontalListSortingStrategy}
         >
           <Box sx={{ display: "flex", gap: 2, overflowX: "auto" }}>
-            {columns.map((column) => (
+            {localColumns.map((column) => (
               <ColumnCard
                 key={column.id}
                 column={column}
@@ -94,7 +120,7 @@ export const ColumnList = ({
           </Box>
         </SortableContext>
 
-        <DragOverlay>
+        <DragOverlay dropAnimation={dropAnimationConfig}>
           {activeColumn ? (
             <ColumnCard
               column={activeColumn}
@@ -108,13 +134,13 @@ export const ColumnList = ({
       <EditColumnDialog
         boardId={boardId}
         column={editColumn}
-        open={!!editColumn}
+        open={Boolean(editColumn)}
         onClose={() => setEditColumn(null)}
       />
       <DeleteColumnDialog
         boardId={boardId}
         column={deleteColumn}
-        open={!!deleteColumn}
+        open={Boolean(deleteColumn)}
         onClose={() => setDeleteColumn(null)}
       />
     </>
