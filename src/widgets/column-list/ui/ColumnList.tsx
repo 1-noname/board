@@ -94,7 +94,7 @@ export const ColumnList = ({
           </Box>
         </SortableContext>
 
-        <DragOverlay dropAnimation={null}>
+        <DragOverlay>
           {activeColumn ? (
             <ColumnCard
               column={activeColumn}
