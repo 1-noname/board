@@ -1,9 +1,13 @@
 import type { Task } from "../model/schema";
 
-import { Box, Chip, Paper, Typography } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import { Box, Chip, IconButton, Paper, Typography } from "@mui/material";
 
 interface TaskCardProps {
   task: Task;
+  onEdit: (task: Task) => void;
+  onDelete: (task: Task) => void;
 }
 
 const priorityColors: Record<
@@ -17,7 +21,7 @@ const priorityColors: Record<
   CRITICAL: "error",
 };
 
-export const TaskCard = ({ task }: TaskCardProps) => {
+export const TaskCard = ({ task, onEdit, onDelete }: TaskCardProps) => {
   return (
     <Paper
       elevation={1}
@@ -44,6 +48,24 @@ export const TaskCard = ({ task }: TaskCardProps) => {
         >
           {task.title}
         </Typography>
+
+        <Box sx={{ display: "flex", gap: 0.5, opacity: 0.8 }}>
+          <IconButton
+            size="small"
+            onClick={() => onEdit(task)}
+            aria-label="edit task"
+          >
+            <EditIcon fontSize="inherit" />
+          </IconButton>
+          <IconButton
+            size="small"
+            color="error"
+            onClick={() => onDelete(task)}
+            aria-label="delete task"
+          >
+            <DeleteIcon fontSize="inherit" />
+          </IconButton>
+        </Box>
       </Box>
 
       {task.description && (
