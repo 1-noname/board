@@ -1,4 +1,4 @@
-import { taskSchema } from "../model/schema";
+import { tasksResponseSchema } from "../model/schema";
 
 import { api } from "@shared/api/base";
 import { useQuery } from "@tanstack/react-query";
@@ -8,7 +8,8 @@ const getTasksRequest = async (boardId: string, columnId: string) => {
     `/boards/${boardId}/columns/${columnId}/tasks`,
   );
 
-  return taskSchema.parse(data);
+  const parsedData = tasksResponseSchema.parse(data);
+  return parsedData.tasks;
 };
 
 export const useTasksQuery = (boardId: string, columnId: string) => {
