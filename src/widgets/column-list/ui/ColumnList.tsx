@@ -1,8 +1,8 @@
 import { type ReactNode, useEffect, useRef, useState } from "react";
 
 import {
-  closestCenter,
   closestCorners,
+  type CollisionDetection,
   defaultDropAnimationSideEffects,
   DndContext,
   type DragEndEvent,
@@ -67,6 +67,23 @@ export const ColumnList = ({
       coordinateGetter: sortableKeyboardCoordinates,
     }),
   );
+
+  const customCollisionDetection: CollisionDetection = (args) => {
+    const activeType = args.active.data.current?.type;
+
+    if (activeType === "Column") {
+      const columnContainers = args.droppableContainers.filter(
+        (c) => c.data.current?.type === "Column",
+      );
+
+      return closestCorners({
+        ...args,
+        droppableContainers: columnContainers,
+      });
+    }
+
+    return closestCorners(args);
+  };
 
   const handleDragStart = (event: DragStartEvent) => {
     const { active } = event;
@@ -249,7 +266,7 @@ export const ColumnList = ({
     <>
       <DndContext
         sensors={sensors}
-        collisionDetection={closestCenter}
+        collisionDetection={customCollisionDetection}
         onDragStart={handleDragStart}
         onDragOver={handleDragOver}
         onDragEnd={handleDragEnd}
