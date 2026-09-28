@@ -1,5 +1,9 @@
 import { useState } from "react";
 
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 import { type Task, TaskCard, useTasksQuery } from "@entities/task";
 import { CreateTaskDialog } from "@features/task/create";
 import { DeleteTaskDialog } from "@features/task/delete";
@@ -20,6 +24,8 @@ export const ColumnTaskList = ({ boardId, columnId }: ColumnTaskListProps) => {
   const [editTask, setEditTask] = useState<Task | null>(null);
   const [deleteTask, setDeleteTask] = useState<Task | null>(null);
 
+  const taskIds = tasks?.map((t) => t.id) || [];
+
   if (isLoading) return <PageLoader />;
 
   if (isError) {
@@ -32,24 +38,34 @@ export const ColumnTaskList = ({ boardId, columnId }: ColumnTaskListProps) => {
 
   return (
     <>
-      <Box>
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
         {!tasks || tasks.length === 0 ? (
           <Typography variant="body2" color="text.secondary" sx={{ py: 1 }}>
             No tasks yet
           </Typography>
         ) : (
-          tasks.map((task) => (
-            <TaskCard
-              key={task.id}
-              task={task}
-              onEdit={setEditTask}
-              onDelete={setDeleteTask}
-            />
-          ))
+          <SortableContext
+            items={taskIds}
+            strategy={verticalListSortingStrategy}
+          >
+            {tasks.map((task) => (
+              <TaskCard
+                key={task.id}
+                task={task}
+                columnId={columnId}
+                onEdit={setEditTask}
+                onDelete={setDeleteTask}
+              />
+            ))}
+          </SortableContext>
         )}
       </Box>
 
-      <Button startIcon={<AddIcon />} onClick={() => setIsCreateOpen(true)}>
+      <Button
+        startIcon={<AddIcon />}
+        onClick={() => setIsCreateOpen(true)}
+        sx={{ mt: 1 }}
+      >
         Add task
       </Button>
 
