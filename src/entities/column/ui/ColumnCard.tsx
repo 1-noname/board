@@ -31,7 +31,13 @@ export const ColumnCard = ({
     transform,
     transition,
     isDragging,
-  } = useSortable({ id: column.id });
+  } = useSortable({
+    id: column.id,
+    data: {
+      type: "Column",
+      column,
+    },
+  });
 
   const style = {
     transform: CSS.Translate.toString(transform),
