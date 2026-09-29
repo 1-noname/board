@@ -1,3 +1,5 @@
+import { memo, useMemo } from "react";
+
 import type { Task } from "../model/schema";
 
 import { useSortable } from "@dnd-kit/sortable";
@@ -24,44 +26,9 @@ const priorityColors: Record<
   CRITICAL: "error",
 };
 
-export const TaskCard = ({
-  task,
-  columnId,
-  onEdit,
-  onDelete,
-}: TaskCardProps) => {
-  const {
-    setNodeRef,
-    attributes,
-    listeners,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({
-    id: task.id,
-    data: {
-      type: "Task",
-      task,
-      columnId,
-      originalColumnId: columnId,
-    },
-  });
-
-  const style = {
-    transform: CSS.Translate.toString(transform),
-    transition,
-    opacity: isDragging ? 0.3 : 1,
-    cursor: isDragging ? "grabbing" : "grab",
-  };
-
-  return (
-    <Box
-      ref={setNodeRef}
-      style={style}
-      {...attributes}
-      {...listeners}
-      sx={{ touchAction: "none" }}
-    >
+const TaskCardContent = memo(
+  ({ task, onEdit, onDelete }: Omit<TaskCardProps, "columnId">) => {
+    return (
       <Paper
         elevation={1}
         sx={{
@@ -144,6 +111,56 @@ export const TaskCard = ({
           />
         </Box>
       </Paper>
+    );
+  },
+);
+
+TaskCardContent.displayName = "TaskCardContent";
+
+export const TaskCard = ({
+  task,
+  columnId,
+  onEdit,
+  onDelete,
+}: TaskCardProps) => {
+  const dragData = useMemo(
+    () => ({
+      type: "Task",
+      task,
+      columnId,
+      originalColumnId: columnId,
+    }),
+    [task, columnId],
+  );
+
+  const {
+    setNodeRef,
+    attributes,
+    listeners,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: task.id,
+    data: dragData,
+  });
+
+  const style = {
+    transform: CSS.Translate.toString(transform),
+    transition,
+    opacity: isDragging ? 0.3 : 1,
+    cursor: isDragging ? "grabbing" : "grab",
+  };
+
+  return (
+    <Box
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      sx={{ touchAction: "none" }}
+    >
+      <TaskCardContent task={task} onEdit={onEdit} onDelete={onDelete} />
     </Box>
   );
 };
