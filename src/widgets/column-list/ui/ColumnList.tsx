@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 
+import { useColumnDialogs } from "../model/useColumnDialogs";
 import { useColumnListDnD } from "../model/useColumnListDnd";
 
 import { DndContext, DragOverlay } from "@dnd-kit/core";
@@ -24,30 +25,31 @@ export const ColumnList = ({
   columns,
   renderTasks,
 }: ColumnListProps) => {
+  const { editColumn, setEditColumn, deleteColumn, setDeleteColumn } =
+    useColumnDialogs();
+
   const {
     localColumns,
     activeColumn,
     activeTask,
-    editColumn,
-    setEditColumn,
-    deleteColumn,
-    setDeleteColumn,
     sensors,
-    customCollisionDetection,
-    dropAnimationConfig,
+    collisionDetection,
+    dropAnimation,
     handleDragStart,
     handleDragOver,
     handleDragEnd,
+    handleDragCancel,
   } = useColumnListDnD({ boardId, columns });
 
   return (
     <>
       <DndContext
         sensors={sensors}
-        collisionDetection={customCollisionDetection}
+        collisionDetection={collisionDetection}
         onDragStart={handleDragStart}
         onDragOver={handleDragOver}
         onDragEnd={handleDragEnd}
+        onDragCancel={handleDragCancel}
       >
         <SortableContext
           items={localColumns.map((c) => c.id)}
@@ -75,7 +77,7 @@ export const ColumnList = ({
           </Box>
         </SortableContext>
 
-        <DragOverlay dropAnimation={dropAnimationConfig}>
+        <DragOverlay dropAnimation={dropAnimation}>
           {activeColumn ? (
             <ColumnCard
               column={activeColumn}

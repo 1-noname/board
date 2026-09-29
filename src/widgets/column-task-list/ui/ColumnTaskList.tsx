@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import {
   SortableContext,
@@ -24,7 +24,9 @@ export const ColumnTaskList = ({ boardId, columnId }: ColumnTaskListProps) => {
   const [editTask, setEditTask] = useState<Task | null>(null);
   const [deleteTask, setDeleteTask] = useState<Task | null>(null);
 
-  const taskIds = tasks?.map((t) => t.id) || [];
+  const taskIds = useMemo(() => {
+    return tasks?.map((t) => t.id) || [];
+  }, [tasks]);
 
   if (isLoading) return <PageLoader />;
 
